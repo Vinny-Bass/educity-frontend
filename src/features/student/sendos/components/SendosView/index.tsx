@@ -23,7 +23,7 @@ export default function SendosView({
   totalValue,
   assets,
 }: SendosViewProps) {
-  const [activeTab, setActiveTab] = useState<TabType>("assets");
+  const [activeTab, setActiveTab] = useState<TabType>("sendos");
 
   const groupedTransactions = transactions.reduce((acc, transaction) => {
     const date = format(new Date(transaction.date), "dd MMM");
@@ -94,6 +94,7 @@ export default function SendosView({
           totalAssets={totalAssets}
           totalValue={totalValue}
           assets={assets}
+          sendosBalance={totalSendos}
         />
       )}
     </div>

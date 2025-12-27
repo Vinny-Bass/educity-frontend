@@ -5,5 +5,5 @@ interface CoinIconProps {
 }
 
 export function CoinIcon({ className }: CoinIconProps) {
-  return <Image src="/sendos_coin.svg" alt="Sendo" className={className} width={0} height={0} style={{ width: '100%', height: 'auto' }} />;
+  return <Image src="/dollar_coin.svg" alt="Sendo" className={className} width={0} height={0} style={{ width: '100%', height: 'auto' }} />;
 }

@@ -19,7 +19,6 @@ export async function fetchFromStrapi<T>(
 ): Promise<T> {
   const token = (await cookies()).get('token')?.value;
   const url = `${STRAPI_URL}/api${endpoint}`;
-
   const defaultOptions: RequestInit = {
     headers: {
       'Content-Type': 'application/json',

@@ -32,7 +32,7 @@ export default function ChapterCompleted({
       {typeof totalChapterSendos === "number" ? (
         <div className="mt-2 flex items-center gap-2 rounded-[10px] bg-[#0E0420] px-4 py-2">
           <Image
-            src="/sendos_coin.svg"
+            src="/dollar_coin.svg"
             alt="Sendos"
             width={20}
             height={20}

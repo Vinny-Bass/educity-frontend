@@ -1,5 +1,6 @@
 "use client";
 
+import { GuidedTour, type GuidedTourStep } from "@/components/ui/guided-tour";
 import { Pagination } from "@/components/ui/pagination";
 import { SearchInput } from "@/components/ui/search-input";
 import { Select } from "@/components/ui/select";
@@ -16,18 +17,31 @@ interface TeacherDashboardViewProps {
 }
 
 export function TeacherDashboardView({ courses }: TeacherDashboardViewProps) {
-  // Initialize with the first course if available
-  const [selectedCourseId, setSelectedCourseId] = useState<string>(
-    courses.length > 0 ? courses[0].id.toString() : ""
-  );
+  const TOUR_STORAGE_KEY = "educity.teacherDashboardTourSeen.v1";
 
-  const [selectedChapterId, setSelectedChapterId] = useState<string>("");
+  // Store explicit user selection; compute an effective selection from current data.
+  const [courseSelection, setCourseSelection] = useState<string | null>(null);
+  const selectedCourseId = useMemo(() => {
+    if (courses.length === 0) return "";
+    if (
+      courseSelection &&
+      courses.some((c) => c.id.toString() === courseSelection)
+    ) {
+      return courseSelection;
+    }
+    return courses[0].id.toString();
+  }, [courses, courseSelection]);
+
+  const [chapterSelection, setChapterSelection] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentStudentPage, setCurrentStudentPage] = useState(0);
   const [activityStats, setActivityStats] = useState<ActivityProgressStat[]>([]);
   const [completionStats, setCompletionStats] = useState<ChapterCompletionStat>({ completedStudents: 0, totalStudents: 0 });
   const [leaderboardStats, setLeaderboardStats] = useState<LeaderboardEntry[]>([]);
   const [studentStats, setStudentStats] = useState<StudentProgressStat[]>([]);
+
+  const [isTourOpen, setIsTourOpen] = useState(false);
+  const [tourStepIndex, setTourStepIndex] = useState(0);
 
   // Derived state for the currently selected course object
   const selectedCourse = useMemo(() =>
@@ -41,19 +55,16 @@ export function TeacherDashboardView({ courses }: TeacherDashboardViewProps) {
     [selectedCourse]
   );
 
-  // Reset selected chapter when course changes
-  useEffect(() => {
-    if (chapters.length > 0) {
-      const firstChapterId = chapters[0].id.toString();
-      if (selectedChapterId !== firstChapterId) {
-        setSelectedChapterId(firstChapterId);
-      }
-    } else {
-      if (selectedChapterId !== "") {
-        setSelectedChapterId("");
-      }
+  const selectedChapterId = useMemo(() => {
+    if (chapters.length === 0) return "";
+    if (
+      chapterSelection &&
+      chapters.some((c) => c.id.toString() === chapterSelection)
+    ) {
+      return chapterSelection;
     }
-  }, [chapters, selectedChapterId]);
+    return chapters[0].id.toString();
+  }, [chapters, chapterSelection]);
 
   // Fetch stats when chapter or course changes
   useEffect(() => {
@@ -69,10 +80,6 @@ export function TeacherDashboardView({ courses }: TeacherDashboardViewProps) {
           setLeaderboardStats(leaderboardStatsData);
         })
         .catch(console.error);
-    } else {
-      setActivityStats([]);
-      setCompletionStats({ completedStudents: 0, totalStudents: 0 });
-      setLeaderboardStats([]);
     }
   }, [selectedChapterId, selectedCourseId]);
 
@@ -90,18 +97,93 @@ export function TeacherDashboardView({ courses }: TeacherDashboardViewProps) {
       }, 300);
 
       return () => clearTimeout(timeoutId);
-    } else {
-      setStudentStats([]);
     }
   }, [selectedCourseId, searchQuery]);
 
+  const tourText =
+    "This is where you can view the full program your class will follow. Explore each mission, see what students will learn, and prepare for upcoming activities.";
+
+  const tourSteps: GuidedTourStep[] = useMemo(
+    () => [
+      {
+        key: "menu-dashboard",
+        targetSelector: '[data-tour="teacher-menu-dashboard"]',
+        title: "Dashboard",
+        text: tourText,
+      },
+      {
+        key: "menu-course",
+        targetSelector: '[data-tour="teacher-menu-course"]',
+        title: "Course",
+        text: tourText,
+      },
+      {
+        key: "menu-team",
+        targetSelector: '[data-tour="teacher-menu-team"]',
+        title: "Team",
+        text: tourText,
+      },
+      {
+        key: "menu-manage-class",
+        targetSelector: '[data-tour="teacher-menu-manage-class"]',
+        title: "Manage class",
+        text: tourText,
+      },
+      {
+        key: "students",
+        targetSelector: '[data-tour="teacher-dashboard-students"]',
+        title: "Students",
+        text: tourText,
+      },
+    ],
+    []
+  );
+
+  // First-time tour (localStorage)
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      const hasSeen = window.localStorage.getItem(TOUR_STORAGE_KEY) === "1";
+      if (hasSeen) return;
+
+      // Delay a tick so targets can render.
+      const id = window.setTimeout(() => {
+        setTourStepIndex(0);
+        setIsTourOpen(true);
+      }, 250);
+      return () => window.clearTimeout(id);
+    } catch {
+      // If storage is blocked, just don't auto-open.
+    }
+  }, []);
+
+  const closeTour = () => {
+    setIsTourOpen(false);
+    try {
+      window.localStorage.setItem(TOUR_STORAGE_KEY, "1");
+    } catch {
+      // ignore
+    }
+  };
+
+  const displayedActivityStats =
+    selectedChapterId && selectedCourseId ? activityStats : [];
+  const displayedCompletionStats =
+    selectedChapterId && selectedCourseId
+      ? completionStats
+      : { completedStudents: 0, totalStudents: 0 };
+  const displayedLeaderboardStats = selectedCourseId ? leaderboardStats : [];
+  const displayedStudentStats = selectedCourseId ? studentStats : [];
 
   // Pagination for students
   const studentsPerPage = 4;
-  const totalStudentPages = Math.ceil(studentStats.length / studentsPerPage);
+  const totalStudentPages = Math.max(
+    1,
+    Math.ceil(displayedStudentStats.length / studentsPerPage)
+  );
   const startStudentIndex = currentStudentPage * studentsPerPage;
   const endStudentIndex = startStudentIndex + studentsPerPage;
-  const currentStudents = studentStats.slice(startStudentIndex, endStudentIndex);
+  const currentStudents = displayedStudentStats.slice(startStudentIndex, endStudentIndex);
 
   const handlePreviousStudentPage = () => {
     setCurrentStudentPage((prev) => Math.max(0, prev - 1));
@@ -115,6 +197,13 @@ export function TeacherDashboardView({ courses }: TeacherDashboardViewProps) {
 
   return (
     <div className="p-5 md:p-6 lg:p-8 bg-[#FAFAFA] min-h-screen">
+      <GuidedTour
+        isOpen={isTourOpen}
+        steps={tourSteps}
+        currentStepIndex={tourStepIndex}
+        onStepChange={setTourStepIndex}
+        onClose={closeTour}
+      />
       <div className="max-w-[1400px] mx-auto">
         {/* Header Section */}
         <div className="mb-6">
@@ -129,8 +218,12 @@ export function TeacherDashboardView({ courses }: TeacherDashboardViewProps) {
             {/* Dropdowns */}
             <div className="flex flex-col sm:flex-row gap-3">
               <Select
+                data-tour="teacher-dashboard-course-select"
                 value={selectedCourseId}
-                onChange={(e) => setSelectedCourseId(e.target.value)}
+                onChange={(e) => {
+                  setCourseSelection(e.target.value);
+                  setChapterSelection(null);
+                }}
               >
                 {courses.length === 0 && <option value="">No courses available</option>}
                 {courses.map((course) => (
@@ -141,8 +234,9 @@ export function TeacherDashboardView({ courses }: TeacherDashboardViewProps) {
               </Select>
 
               <Select
+                data-tour="teacher-dashboard-chapter-select"
                 value={selectedChapterId}
-                onChange={(e) => setSelectedChapterId(e.target.value)}
+                onChange={(e) => setChapterSelection(e.target.value)}
                 disabled={chapters.length === 0}
               >
                 {chapters.length === 0 && <option value="">No chapters available</option>}
@@ -157,12 +251,12 @@ export function TeacherDashboardView({ courses }: TeacherDashboardViewProps) {
         </div>
 
         {/* Cards Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5" data-tour="teacher-dashboard-chapter-stats">
           {/* Card 1 - Chapter Progress (50% width on large screens) */}
           <div className="lg:col-span-1">
             <ChapterProgressCard
               chapterName={selectedChapterName || "No Chapter Selected"}
-              activities={activityStats}
+              activities={displayedActivityStats}
               itemsPerPage={3}
             />
           </div>
@@ -172,17 +266,17 @@ export function TeacherDashboardView({ courses }: TeacherDashboardViewProps) {
             {/* Card 2 - Chapter Completion */}
             <ChapterCompletionCard
               chapterName={selectedChapterName ? `Chapter ${selectedChapterName.split(':')[0].replace('Chapter ', '')}` : "N/A"}
-              completedStudents={completionStats.completedStudents}
-              totalStudents={completionStats.totalStudents}
+              completedStudents={displayedCompletionStats.completedStudents}
+              totalStudents={displayedCompletionStats.totalStudents}
             />
 
             {/* Card 3 - Leaderboard */}
-            <LeaderboardCard entries={leaderboardStats} maxEntries={5} />
+            <LeaderboardCard entries={displayedLeaderboardStats} maxEntries={5} />
           </div>
         </div>
 
         {/* Students Section */}
-        <div className="mt-12">
+        <div className="mt-12" data-tour="teacher-dashboard-students">
           {/* Students Header */}
           <div className="mb-6">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-4">

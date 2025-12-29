@@ -20,6 +20,7 @@ const defaultTeacherMenuItems: SidebarItem[] = [
   { label: "Diagnostic Test", href: "/teacher/diagnostic-test", icon: "/navbar_diag_test.svg" },
   { label: "Sendos", href: "/teacher/sendos", icon: "/navbar_sendos.svg" },
   { label: "Team", href: "/teacher/team", icon: "/navbar_team.svg" },
+  { label: "Manage class", href: "/teacher/manage-class", icon: "/navbar_book.svg" },
 ];
 
 interface SidebarProps {
@@ -79,6 +80,17 @@ export function Sidebar({
               <li key={item.href}>
                 <Link
                   href={item.href}
+                  data-tour={
+                    item.href === "/teacher/dashboard"
+                      ? "teacher-menu-dashboard"
+                      : item.href === "/teacher/course"
+                        ? "teacher-menu-course"
+                        : item.href === "/teacher/team"
+                          ? "teacher-menu-team"
+                          : item.href === "/teacher/manage-class"
+                            ? "teacher-menu-manage-class"
+                            : undefined
+                  }
                   className={`flex items-center gap-3 px-4 py-3 rounded-[10px] transition-colors ${
                     isActive
                       ? "bg-[#F3ECFF]"

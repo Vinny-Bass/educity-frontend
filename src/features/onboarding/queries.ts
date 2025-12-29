@@ -29,6 +29,19 @@ export async function completeOnboarding(userId: number, payload: CompleteOnboar
   });
 }
 
+import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
+
+export async function completeTeacherOnboarding(userId: number) {
+  const result = await putToStrapi(`/users/${userId}`, {
+    isOnboardingCompleted: true,
+  });
+
+  revalidatePath('/teacher/dashboard');
+  revalidatePath('/teacher/onboarding');
+  redirect('/teacher/dashboard');
+}
+
 export async function getChaptersByCourse(courseId: number) {
   const query = qs.stringify({
     filters: { course: { id: { $eq: courseId } } },

@@ -21,6 +21,10 @@ export default async function TeacherLayout({
     }
   }
 
+  if (user.isOnboardingCompleted === false) {
+    redirect("/teacher/onboarding");
+  }
+
   return (
     <div className="flex min-h-screen bg-white">
       <Sidebar />

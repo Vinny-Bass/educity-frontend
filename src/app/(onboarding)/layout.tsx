@@ -1,4 +1,5 @@
 import { getUser } from '@/lib/auth';
+import { isStudent, isTeacher } from '@/lib/roles';
 import { redirect } from 'next/navigation';
 import React from 'react';
 
@@ -24,7 +25,13 @@ export default async function OnboardingLayout({
   // If the user has an enrollment, they have completed onboarding.
   // Redirect them to their dashboard.
   if (user.isOnboardingCompleted === true) {
-    redirect('/student/dashboard');
+    if (isTeacher(user)) {
+      redirect('/teacher/dashboard');
+    }
+    if (isStudent(user)) {
+      redirect('/student/dashboard');
+    }
+    redirect('/');
   }
 
   // User is logged in but has not completed onboarding, show the flow.

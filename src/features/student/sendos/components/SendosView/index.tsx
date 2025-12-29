@@ -1,9 +1,9 @@
 "use client";
 
 import { MySendos } from "@/components/MySendos";
-import { SendosTransaction } from "@/features/student/sendos/queries";
-import { Asset } from "@/features/student/assets/queries";
 import AssetsView from "@/features/student/assets/components/AssetsView";
+import { Asset } from "@/features/student/assets/queries";
+import { SendosTransaction } from "@/features/student/sendos/queries";
 import { format } from "date-fns";
 import { useState } from "react";
 import { SendoTransaction } from "../SendoTransaction";
@@ -43,7 +43,7 @@ export default function SendosView({
       <div className="flex gap-8 mb-6">
         <button
           onClick={() => setActiveTab("sendos")}
-          className={`font-baloo text-[24px] font-normal transition-colors ${
+          className={`font-baloo text-[24px] font-normal transition-colors cursor-pointer ${
             activeTab === "sendos"
               ? "text-[#0E0420] font-bold border-b-2 border-[#FCD34D] pb-2"
               : "text-[#87838F]"
@@ -53,7 +53,7 @@ export default function SendosView({
         </button>
         <button
           onClick={() => setActiveTab("assets")}
-          className={`font-baloo text-[24px] font-normal transition-colors ${
+          className={`font-baloo text-[24px] font-normal transition-colors cursor-pointer ${
             activeTab === "assets"
               ? "text-[#0E0420] font-bold border-b-2 border-[#FCD34D] pb-2"
               : "text-[#87838F]"

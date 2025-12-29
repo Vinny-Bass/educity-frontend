@@ -163,15 +163,18 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ onStepChange, onComple
                   placeholder="First name"
                   {...registerProfile('firstName')}
                   className={cn("h-20 p-6 border-2 border-[#F3F3F3] rounded-[20px]")}
+                  required
                 />
                 <FormError message={profileErrors.firstName?.message} />
               </div>
               <div>
                 <Input
-                  placeholder="Last name (optional)"
+                  placeholder="Last name"
                   {...registerProfile('lastName')}
                   className={cn("h-20 p-6 border-2 border-[#F3F3F3] rounded-[20px]")}
+                  required
                 />
+                <FormError message={profileErrors.lastName?.message} />
               </div>
             </div>
             <div>

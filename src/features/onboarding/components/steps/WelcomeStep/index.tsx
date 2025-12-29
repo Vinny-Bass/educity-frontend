@@ -1,12 +1,36 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
+import confetti from 'canvas-confetti';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 
 export const WelcomeStep: React.FC = () => {
   const router = useRouter();
+  const imageRef = useRef<HTMLImageElement>(null);
+
+  useEffect(() => {
+    const triggerConfetti = () => {
+      if (imageRef.current) {
+        const rect = imageRef.current.getBoundingClientRect();
+        const x = (rect.left + rect.width / 2) / window.innerWidth;
+        const y = (rect.top + rect.height / 2) / window.innerHeight;
+
+        confetti({
+          particleCount: 100,
+          spread: 360,
+          origin: { x, y },
+          colors: ['#9056F5', '#F3F3F3', '#0E0420'], // Matching theme colors
+        });
+      }
+    };
+
+    // Small delay to ensure layout is stable and image is positioned
+    const timer = setTimeout(triggerConfetti, 300);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleLetsGo = () => {
     router.push('/student/dashboard');
@@ -33,6 +57,7 @@ export const WelcomeStep: React.FC = () => {
 
         <div className="my-4">
           <Image
+            ref={imageRef}
             src="/welcome_cat.svg"
             alt="Welcome Cat"
             width={200}

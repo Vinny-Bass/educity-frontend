@@ -1,5 +1,9 @@
-import Image from "next/image";
+'use client';
+
 import { Button } from "@/components/ui/button";
+import confetti from "canvas-confetti";
+import Image from "next/image";
+import { useEffect, useRef } from "react";
 
 interface CongratsModalProps {
   sendosEarned: number;
@@ -7,8 +11,32 @@ interface CongratsModalProps {
 }
 
 export function CongratsModal({ sendosEarned, onContinue }: CongratsModalProps) {
+  const imageRef = useRef<HTMLImageElement>(null);
+
+  useEffect(() => {
+    const triggerConfetti = () => {
+      if (imageRef.current) {
+        const rect = imageRef.current.getBoundingClientRect();
+        const x = (rect.left + rect.width / 2) / window.innerWidth;
+        const y = (rect.top + rect.height / 2) / window.innerHeight;
+
+        confetti({
+          particleCount: 100,
+          spread: 360,
+          origin: { x, y },
+          colors: ['#9056F5', '#F3F3F3', '#0E0420'], // Matching theme colors
+        });
+      }
+    };
+
+    // Small delay to ensure layout is stable and image is positioned
+    const timer = setTimeout(triggerConfetti, 300);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center">
+    <div className="fixed inset-0 z-100 flex items-center justify-center">
       {/* Backdrop with blur and color */}
       <div
         className="absolute inset-0 bg-[#0E0420]/80 backdrop-blur-sm"
@@ -19,6 +47,7 @@ export function CongratsModal({ sendosEarned, onContinue }: CongratsModalProps) 
       <div className="relative z-10 flex flex-col items-center px-4 text-center animate-in fade-in zoom-in duration-300">
         <div className="mb-8 relative w-40 h-40 md:w-48 md:h-48 lg:w-56 lg:h-56">
             <Image
+              ref={imageRef}
               src="/congrats_cat.svg"
               alt="Congrats Cat"
               fill

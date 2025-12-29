@@ -1,5 +1,4 @@
 import { AuthProvider } from "@/contexts/AuthContext";
-import { I18nProvider } from "@/contexts/I18nContext";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 import { Baloo_2, Inter } from "next/font/google";
@@ -35,9 +34,9 @@ export default function RootLayout({
           fontBaloo.variable
         )}
       >
-        <I18nProvider>
-          <AuthProvider>{children}</AuthProvider>
-        </I18nProvider>
+        <AuthProvider>
+            {children}
+        </AuthProvider>
       </body>
     </html>
   );

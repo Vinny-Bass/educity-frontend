@@ -52,7 +52,7 @@ export const NextActivityCard = ({
       {sendosAmount !== undefined && (
         <div className="bg-[#FFF4E3] rounded-[10px] px-3 py-1 flex items-center gap-1 shrink-0">
           <Image
-            src="/sendos_coin.svg"
+            src="/dollar_coin.svg"
             alt="Sendos"
             width={16}
             height={16}

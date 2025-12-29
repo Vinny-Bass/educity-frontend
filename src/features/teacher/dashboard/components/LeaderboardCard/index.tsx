@@ -94,7 +94,7 @@ export function LeaderboardCard({
             {/* Sendos */}
             <div className="flex items-center gap-1.5 shrink-0">
               <Image
-                src="/sendos_coin.svg"
+                src="/dollar_coin.svg"
                 alt="Sendos"
                 width={14}
                 height={14}

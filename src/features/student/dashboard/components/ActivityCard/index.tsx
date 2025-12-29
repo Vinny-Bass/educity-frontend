@@ -67,7 +67,7 @@ export const ActivityCard = ({
         </div>
         <div className="flex items-center gap-1 shrink-0">
           <Image
-            src="/sendos_coin.svg"
+            src="/dollar_coin.svg"
             alt="Sendos"
             width={16}
             height={16}

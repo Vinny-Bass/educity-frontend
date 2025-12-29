@@ -29,7 +29,7 @@ export const MySendos = ({ sendosAmount, onClick, showTitle }: MySendosProps) =>
 
       <div className="flex items-center gap-2">
         <Image
-          src="/sendos_coin.svg"
+          src="/dollar_coin.svg"
           alt="Sendos coin"
           width={24}
           height={24}

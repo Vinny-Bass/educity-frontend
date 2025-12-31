@@ -153,7 +153,7 @@ export function Sidebar({
       {user && (
         <div className="px-4 py-4 mt-auto border-t border-gray-200">
           <Link
-            href="/student/sendos"
+            href="/student/profile"
             className="flex items-center gap-3 px-4 py-3 rounded-[10px] hover:bg-gray-50"
           >
             <Image

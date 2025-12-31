@@ -25,7 +25,7 @@ export function StudentCard({
   progress = 50,
 }: StudentCardProps) {
   return (
-    <div className="bg-white rounded-[20px] shadow-sm flex flex-col items-center min-w-[220px] max-w-[290px] overflow-hidden">
+    <div className="bg-white rounded-[20px] shadow-cardPC flex flex-col items-center w-[260px] min-w-[260px] h-[300px] overflow-hidden">
       {/* Profile Avatar */}
       <div className="w-16 h-16 rounded-full bg-linear-to-br from-[#9056F5] to-[#7c4ae8] flex items-center justify-center shrink-0 overflow-hidden mb-3 border-2 border-gray-100 mt-5">
         <Image
@@ -40,7 +40,7 @@ export function StudentCard({
       {/* Student Name */}
       <h4
         className="text-[16px] font-bold text-[#0E0420] text-center mb-4 px-5"
-        style={{ fontFamily: "ABC Diatype Unlicensed Trial, sans-serif" }}
+        style={{ fontFamily: "var(--font-abc-diatype), sans-serif" }}
       >
         {name}
       </h4>
@@ -82,7 +82,7 @@ export function StudentCard({
             <p
               className="text-[11px] font-bold mb-1"
               style={{
-                fontFamily: "ABC Diatype Unlicensed Trial, sans-serif",
+                fontFamily: "var(--font-abc-diatype), sans-serif",
                 color: "#87838F",
               }}
             >
@@ -90,7 +90,7 @@ export function StudentCard({
             </p>
             <p
               className="text-[13px] font-bold text-[#474250] mb-2 leading-tight line-clamp-2"
-              style={{ fontFamily: "ABC Diatype Unlicensed Trial, sans-serif" }}
+              style={{ fontFamily: "var(--font-abc-diatype), sans-serif" }}
               title={`${chapterName} > ${activityName}`}
             >
               {chapterName} {">"} {activityName}
@@ -107,7 +107,7 @@ export function StudentCard({
       </div>
 
       {/* Ranking & Sendos Section */}
-      <div className="w-full px-5 pb-5">
+      <div className="w-full px-5 pb-5 mt-auto">
         <div className="flex items-start gap-2.5">
           {/* Lightning Icon */}
           <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center shrink-0">
@@ -133,13 +133,13 @@ export function StudentCard({
           <div className="flex-1 min-w-0">
             <p
               className="text-[11px] font-bold text-[#87838F] mb-1"
-              style={{ fontFamily: "ABC Diatype Unlicensed Trial, sans-serif" }}
+              style={{ fontFamily: "var(--font-abc-diatype), sans-serif" }}
             >
               {rankingPosition}{rankingPosition === 1 ? 'st' : rankingPosition === 2 ? 'nd' : rankingPosition === 3 ? 'rd' : 'th'}
             </p>
             <p
               className="text-[13px] font-bold text-[#474250]"
-              style={{ fontFamily: "ABC Diatype Unlicensed Trial, sans-serif" }}
+              style={{ fontFamily: "var(--font-abc-diatype), sans-serif" }}
             >
               {sendos} Sendos
             </p>

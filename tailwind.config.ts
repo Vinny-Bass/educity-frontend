@@ -19,7 +19,7 @@ const config = {
 				},
 				gray: {
 					100: '#F3F3F3',
-					400: '87838F',
+					400: '#87838F',
 					600: '#0E0420',
 				},
 				quiz: {
@@ -31,7 +31,9 @@ const config = {
 			},
 			boxShadow: {
 				'elevation': '0 0 20px rgba(14, 4, 32, 0.1)',
-				'custom': '0 0px 10px rgba(14, 4, 32, 0.1)'
+				'custom': '0 0px 10px rgba(14, 4, 32, 0.1)',
+				// Matches Figma token: 0px 5px 20px 0px rgba(14, 4, 32, 0.04)
+				'cardPC': '0px 5px 20px 0px rgba(14, 4, 32, 0.04)',
 			},
 		},
 	},

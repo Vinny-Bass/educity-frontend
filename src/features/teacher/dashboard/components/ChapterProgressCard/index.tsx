@@ -40,7 +40,7 @@ export function ChapterProgressCard({
   };
 
   return (
-    <div className="bg-white rounded-[20px] p-5 shadow-sm">
+    <div className="bg-white rounded-[20px] p-5 shadow-cardPC flex flex-col min-h-[300px]">
       {/* Chapter Header */}
       <div className="flex items-center gap-2 mb-4">
         <div className="w-8 h-8 rounded-full bg-[#F3ECFF] flex items-center justify-center shrink-0">
@@ -48,14 +48,14 @@ export function ChapterProgressCard({
         </div>
         <h3
           className="text-[15px] font-bold text-[#9056F5]"
-          style={{ fontFamily: "ABC Diatype Unlicensed Trial, sans-serif" }}
+          style={{ fontFamily: "var(--font-abc-diatype), sans-serif" }}
         >
           {chapterName}
         </h3>
       </div>
 
       {/* Activities List */}
-      <div className="space-y-3 mb-4">
+      <div className="space-y-3 flex-1">
         {currentActivities.map((activity) => {
           const progressPercentage =
             activity.totalStudents > 0
@@ -63,34 +63,32 @@ export function ChapterProgressCard({
               : 0;
 
           return (
-            <div key={activity.id} className="space-y-1.5">
+            <div key={activity.id} className="flex items-center gap-3">
               {/* Activity Name */}
               <div
-                className="text-[13px] font-bold text-[#0E0420]"
-                style={{ fontFamily: "ABC Diatype Unlicensed Trial, sans-serif" }}
+                className="min-w-0 flex-[0_1_180px] text-[13px] font-bold text-[#0E0420] truncate"
+                style={{ fontFamily: "var(--font-abc-diatype), sans-serif" }}
+                title={activity.name}
               >
                 {activity.name}
               </div>
 
-              {/* Progress Bar and Count */}
-              <div className="flex items-center gap-2.5">
-                {/* Progress Bar */}
-                <div className="flex-1 h-1.5 bg-[#F3F3F3] rounded-[6px] overflow-hidden">
-                  <div
-                    className="h-full bg-[#9056F5] rounded-[6px] transition-all duration-300"
-                    style={{ width: `${progressPercentage}%` }}
-                  />
-                </div>
+              {/* Progress Bar */}
+              <div className="flex-1 h-1.5 bg-[#F3F3F3] rounded-[6px] overflow-hidden">
+                <div
+                  className="h-full bg-[#9056F5] rounded-[6px] transition-all duration-300"
+                  style={{ width: `${progressPercentage}%` }}
+                />
+              </div>
 
-                {/* Completion Badge */}
-                <div className="flex items-center justify-center min-w-[40px] h-6 px-2.5 bg-[#F3ECFF] rounded-[8px]">
-                  <span
-                    className="text-[12px] font-bold text-[#9056F5]"
-                    style={{ fontFamily: "ABC Diatype Unlicensed Trial, sans-serif" }}
-                  >
-                    {activity.completedCount}
-                  </span>
-                </div>
+              {/* Completion Badge */}
+              <div className="flex items-center justify-center min-w-[40px] h-6 px-2.5 bg-[#F3ECFF] rounded-[10px] shrink-0">
+                <span
+                  className="text-[12px] font-bold text-[#9056F5]"
+                  style={{ fontFamily: "var(--font-abc-diatype), sans-serif" }}
+                >
+                  {activity.completedCount}
+                </span>
               </div>
             </div>
           );
@@ -103,6 +101,7 @@ export function ChapterProgressCard({
         totalPages={totalPages}
         onPrevious={handlePrevious}
         onNext={handleNext}
+        className="mt-4"
       />
     </div>
   );

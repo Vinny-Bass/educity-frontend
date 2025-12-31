@@ -89,6 +89,23 @@
   --brand-dark: #0E0420;
   --grayscale-300: #C6C4CB;
 
+  /* Figma-like tokens (teacher dashboard) */
+  --grayscale-100: #F3F3F3;
+  --grayscale-200: #DCDBDE;
+  --grayscale-400: #87838F;
+  --grayscale-500: #474250;
+  --grayscale-600: #0E0420;
+  --purple-100: #F3ECFF;
+  --purple-400: #9056F5;
+  --card-PC: 0px 5px 20px 0px rgba(14, 4, 32, 0.04);
+
+  /*
+    Figma uses "ABC Diatype Unlicensed Trial". We don't ship that font in this repo,
+    so we alias it to the app sans font (Inter) for consistent rendering.
+    If you later add a real ABC Diatype font-face, update this variable only.
+  */
+  --font-abc-diatype: var(--font-sans);
+
   /* The '--font-baloo' variable itself will be injected
     by next/font from layout.tsx
   */

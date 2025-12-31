@@ -8,6 +8,7 @@ import { DashboardData } from "@/features/student/dashboard/types";
 import { getStrapiMedia } from "@/lib/media";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { MyAssets } from "../../../../../components/MyAssets";
 
 interface DashboardViewProps {
   sendosAmount: number;
@@ -146,6 +147,7 @@ export default function DashboardView({
     <div className="bg-white p-4 md:p-6 lg:p-8">
       <div className="max-w-2xl mx-auto space-y-6">
         <MySendos sendosAmount={sendosAmount} showTitle={true}/>
+        <MyAssets />
 
         <div className="space-y-4">
           <h2 className="font-baloo text-[26px] font-normal text-foreground">

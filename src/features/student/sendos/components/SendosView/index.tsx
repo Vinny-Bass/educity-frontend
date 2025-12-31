@@ -5,6 +5,7 @@ import AssetsView from "@/features/student/assets/components/AssetsView";
 import { Asset } from "@/features/student/assets/queries";
 import { SendosTransaction } from "@/features/student/sendos/queries";
 import { format } from "date-fns";
+import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { SendoTransaction } from "../SendoTransaction";
 
@@ -23,7 +24,11 @@ export default function SendosView({
   totalValue,
   assets,
 }: SendosViewProps) {
-  const [activeTab, setActiveTab] = useState<TabType>("sendos");
+  const searchParams = useSearchParams();
+  const assetsParam = searchParams.get("assets");
+
+  const [activeTab, setActiveTab] = useState<TabType>(assetsParam ? "assets" : "sendos");
+
 
   const groupedTransactions = transactions.reduce((acc, transaction) => {
     const date = format(new Date(transaction.date), "dd MMM");

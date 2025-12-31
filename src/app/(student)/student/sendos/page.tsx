@@ -1,18 +1,18 @@
+import { AssetsResponse, getMyAssets } from "@/features/student/assets/queries";
 import SendosView from "@/features/student/sendos/components/SendosView";
 import { getMySendosTransactions } from "@/features/student/sendos/queries";
-import { AssetsResponse, getMyAssets } from "@/features/student/assets/queries";
 import { StrapiApiError } from "@/types/errors";
 
 export default async function SendosPage() {
   const transactions = await getMySendosTransactions();
-  
+
   // Fetch assets data
   let assetsData: AssetsResponse = {
     totalAssets: 0,
     totalValue: 0,
     assets: [],
   };
-  
+
   try {
     assetsData = await getMyAssets();
   } catch (error) {

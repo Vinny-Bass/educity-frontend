@@ -10,9 +10,9 @@ interface ChapterCardProps {
 
 export function ChapterCard({ chapter }: ChapterCardProps) {
   return (
-    <div className="bg-white rounded-[20px] p-4 md:p-5 shadow-[0_5px_20px_0_rgba(14,4,32,0.04)]">
+    <div className="bg-white rounded-[20px] p-5 shadow-cardPC w-[260px] h-[380px] flex flex-col">
       {false && chapter.thumbnail ? (
-        <div className="w-full h-32 md:h-40 mb-4 rounded-[10px] overflow-hidden">
+        <div className="w-full h-[130px] mb-5 rounded-[10px] overflow-hidden">
           <Image
             src={chapter.thumbnail || ""}
             alt={chapter.name}
@@ -22,7 +22,7 @@ export function ChapterCard({ chapter }: ChapterCardProps) {
           />
         </div>
       ) : (
-        <div className="w-full h-32 md:h-40 mb-4 rounded-[10px] bg-[#F3ECFF] flex items-center justify-center">
+        <div className="w-full h-[130px] mb-5 rounded-[10px] bg-[#F3ECFF] flex items-center justify-center">
           <Image
             src="/teacher_dash_book.svg"
             alt="Chapter"
@@ -35,20 +35,26 @@ export function ChapterCard({ chapter }: ChapterCardProps) {
 
       {/* Chapter Number Badge */}
       <div className="mb-3">
-        <div className="inline-block px-3 py-1 rounded-[10px] bg-[#F3ECFF]">
+        <div className="inline-flex items-center justify-center px-2.5 h-[30px] rounded-[10px] bg-[#F3ECFF]">
           <span
             className="text-[11px] font-extrabold text-[#7345C2]"
-            style={{ fontFamily: "ABC Diatype Unlicensed Trial, sans-serif", fontWeight: 800 }}
+            style={{
+              fontFamily: "var(--font-abc-diatype), sans-serif",
+              fontWeight: 800,
+            }}
           >
-            Chapter {chapter.chapterNumber}
+            Mission {chapter.chapterNumber}
           </span>
         </div>
       </div>
 
       {/* Chapter Title */}
       <h3
-        className="text-[18px] font-bold text-[#0E0420] mb-4"
-        style={{ fontFamily: "ABC Diatype Unlicensed Trial, sans-serif", fontWeight: 700 }}
+        className="text-[18px] leading-[24px] font-bold text-[#0E0420] mb-4"
+        style={{
+          fontFamily: "var(--font-abc-diatype), sans-serif",
+          fontWeight: 700,
+        }}
       >
         {chapter.name}
       </h3>
@@ -88,19 +94,29 @@ export function ChapterCard({ chapter }: ChapterCardProps) {
           )}
         </svg>
         <span
-          className="text-[11px] font-medium text-[#87838F]"
-          style={{ fontFamily: "ABC Diatype Unlicensed Trial, sans-serif", fontWeight: 500 }}
+          className={`text-[11px] leading-[18px] font-medium ${
+            chapter.completed ? "text-[#9056F5]" : "text-[#87838F]"
+          }`}
+          style={{
+            fontFamily: "var(--font-abc-diatype), sans-serif",
+            fontWeight: 500,
+          }}
         >
-          {chapter.completed ? "Completed" : "Mark as complete"}
+          Mark as complete
         </span>
       </div>
 
       {/* Start Button */}
       <Button
-        className="w-full h-auto rounded-[0.625rem] bg-[#9056F5] py-3 text-base font-normal text-white hover:bg-[#7c4ae8] font-baloo"
-        style={{ fontFamily: "Baloo, sans-serif" }}
+        disabled={chapter.completed}
+        className={`w-full h-10 rounded-[10px] text-[15px] leading-[18px] font-bold ${
+          chapter.completed
+            ? "bg-[#DCDBDE] text-white/60 hover:bg-[#DCDBDE]"
+            : "bg-[#9056F5] text-white hover:bg-[#7c4ae8]"
+        }`}
+        style={{ fontFamily: "var(--font-abc-diatype), sans-serif" }}
       >
-        Start
+        {chapter.completed ? "Done" : "Start"}
       </Button>
     </div>
   );

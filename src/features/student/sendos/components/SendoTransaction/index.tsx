@@ -15,6 +15,10 @@ export const SendoTransaction = ({
   sendosAmount,
   iconUrl,
 }: SendoTransactionProps) => {
+  const isSpent = sendosAmount < 0;
+  const sign = isSpent ? "-" : "+";
+  const displayAmount = Math.abs(sendosAmount);
+
   return (
   <div
       className="bg-gray-100 rounded-xl-plus p-4 flex items-center gap-3 transition-opacity hover:opacity-90"
@@ -38,8 +42,13 @@ export const SendoTransaction = ({
         </p>
       </div>
 
-      <span className="font-baloo text-[22px] font-medium text-[#0E0420]">
-        +{sendosAmount}
+      <span
+        className={`font-baloo text-[22px] font-medium ${
+          isSpent ? "text-red-600" : "text-[#0E0420]"
+        }`}
+      >
+        {sign}
+        {displayAmount}
       </span>
     </div>
   );

@@ -8,6 +8,10 @@ import { format } from "date-fns";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { SendoTransaction } from "../SendoTransaction";
+import {
+  SendosTransactionsFilter,
+  SendosTransactionsFilterValue,
+} from "../SendosTransactionsFilter";
 
 interface SendosViewProps {
   transactions: SendosTransaction[];
@@ -28,9 +32,16 @@ export default function SendosView({
   const assetsParam = searchParams.get("assets");
 
   const [activeTab, setActiveTab] = useState<TabType>(assetsParam ? "assets" : "sendos");
+  const [transactionsFilter, setTransactionsFilter] =
+    useState<SendosTransactionsFilterValue>("all");
 
+  const filteredTransactions = transactions.filter((t) => {
+    if (transactionsFilter === "earned") return t.amount > 0;
+    if (transactionsFilter === "spent") return t.amount < 0;
+    return true;
+  });
 
-  const groupedTransactions = transactions.reduce((acc, transaction) => {
+  const groupedTransactions = filteredTransactions.reduce((acc, transaction) => {
     const date = format(new Date(transaction.date), "dd MMM");
     if (!acc[date]) {
       acc[date] = [];
@@ -72,6 +83,12 @@ export default function SendosView({
       {activeTab === "sendos" ? (
         <>
           <MySendos sendosAmount={totalSendos} showTitle={false} />
+          <div className="pt-6">
+            <SendosTransactionsFilter
+              value={transactionsFilter}
+              onChange={setTransactionsFilter}
+            />
+          </div>
           <div className="space-y-8 pt-8 pl-2">
             {Object.entries(groupedTransactions).map(([date, transactionsOnDate]) => (
               <div key={date}>
@@ -89,7 +106,7 @@ export default function SendosView({
                 </ul>
               </div>
             ))}
-            {transactions.length === 0 && (
+            {filteredTransactions.length === 0 && (
               <p className="text-center text-gray-500">No transactions yet.</p>
             )}
           </div>

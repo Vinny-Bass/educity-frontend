@@ -90,7 +90,7 @@ export function CourseView({
                 value={selectedCourse.id}
                 onChange={(e) => handleCourseChange(e.target.value)}
                 disabled={isPending}
-                size="figma"
+                boxSize="figma"
                 className="w-[150px]"
               >
                 {_courses.map((course) => (

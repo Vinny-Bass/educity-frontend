@@ -4,13 +4,13 @@ import * as React from "react";
 
 interface SearchInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   onSearch?: (value: string) => void;
-  size?: "sm" | "figma";
+  boxSize?: "sm" | "figma";
 }
 
 export function SearchInput({
   onSearch,
   className = "",
-  size = "sm",
+  boxSize = "sm",
   ...props
 }: SearchInputProps) {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -23,7 +23,7 @@ export function SearchInput({
   };
 
   const inputSizeClasses =
-    size === "figma"
+    boxSize === "figma"
       ? // Figma export: h=50, border=2, radius=10, font 16 medium-ish, padding 24
         "h-[50px] pl-6 pr-12 py-3 border-2 rounded-[10px] text-[16px] font-medium"
       : "h-9 pl-10 pr-3 py-1.5 border rounded-lg text-[13px] font-normal";
@@ -48,7 +48,7 @@ export function SearchInput({
       />
       <div
         className={
-          size === "figma"
+          boxSize === "figma"
             ? "absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none"
             : "absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"
         }

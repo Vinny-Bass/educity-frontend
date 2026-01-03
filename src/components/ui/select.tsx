@@ -4,17 +4,17 @@ import * as React from "react";
 
 interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
   children: React.ReactNode;
-  size?: "sm" | "figma";
+  boxSize?: "sm" | "figma";
 }
 
 export function Select({
   children,
   className = "",
-  size = "sm",
+  boxSize = "sm",
   ...props
 }: SelectProps) {
   const sizeClasses =
-    size === "figma"
+    boxSize === "figma"
       ? // Figma export: h=50, border=2, radius=10, font 16 medium-ish
         "h-[50px] px-6 py-3 border-2 rounded-[10px] text-[16px] font-medium"
       : "h-9 px-3 py-1.5 border rounded-lg text-[13px] font-bold";

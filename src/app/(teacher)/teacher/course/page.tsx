@@ -8,6 +8,15 @@ export default async function CoursePage() {
 
   const courses = await getCourses();
 
+  if (!courses || courses.length === 0) {
+    return (
+      <div className="p-8">
+        <h1 className="text-2xl font-bold">No courses found</h1>
+        <p className="mt-2 text-gray-600">You are not assigned to any courses yet.</p>
+      </div>
+    );
+  }
+
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <CourseView

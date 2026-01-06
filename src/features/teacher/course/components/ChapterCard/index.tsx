@@ -1,14 +1,42 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Class } from "@/types/enrollment";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useState, useTransition } from "react";
+import { updateCourseProgress } from "../../queries";
 import type { Chapter } from "../../types";
 
 interface ChapterCardProps {
   chapter: Chapter;
+  initialClass: Class;
 }
 
-export function ChapterCard({ chapter }: ChapterCardProps) {
+export function ChapterCard({ chapter, initialClass }: ChapterCardProps) {
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+  const [isCompleted, setIsCompleted] = useState(chapter.completed);
+
+  const handleToggleComplete = () => {
+    const newStatus = !isCompleted;
+
+    // Optimistic update
+    setIsCompleted(newStatus);
+
+    startTransition(async () => {
+      try {
+        await updateCourseProgress(initialClass.documentId || "", chapter.documentId, newStatus);
+        router.refresh();
+      } catch (error) {
+        // Revert on error
+        setIsCompleted(!newStatus);
+        console.error("Failed to update progress:", error);
+      }
+    });
+  };
+
   return (
     <div className="bg-white rounded-[20px] p-5 shadow-cardPC w-[260px] h-[380px] flex flex-col">
       {false && chapter.thumbnail ? (
@@ -63,62 +91,43 @@ export function ChapterCard({ chapter }: ChapterCardProps) {
       <div className="h-px bg-[#DCDBDE] rounded mb-4" />
 
       {/* Completion Status */}
-      <div className="flex items-center gap-2 mb-4">
-        <svg
-          width="16"
-          height="16"
-          viewBox="0 0 16 16"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          className={chapter.completed ? "text-[#9056F5]" : "text-[#87838F]"}
-        >
-          {chapter.completed ? (
-            <path
-              d="M13.333 4L6 11.333 2.667 8"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          ) : (
-            <rect
-              x="2"
-              y="2"
-              width="12"
-              height="12"
-              rx="2"
-              stroke="currentColor"
-              strokeWidth="2"
-              fill="none"
-            />
-          )}
-        </svg>
+      <div
+        className={`flex items-center gap-2 mb-4 ${isCompleted ? 'cursor-default' : 'cursor-pointer'}`}
+        onClick={(isPending || isCompleted) ? undefined : handleToggleComplete}
+      >
+        <Checkbox
+          checked={isCompleted}
+          disabled={isPending || isCompleted}
+          className={isCompleted
+            ? "border-green-600 data-[state=checked]:bg-green-600 data-[state=checked]:text-white disabled:opacity-100"
+            : "border-[#87838F]"
+          }
+        />
         <span
           className={`text-[11px] leading-[18px] font-medium ${
-            chapter.completed ? "text-[#9056F5]" : "text-[#87838F]"
+            isCompleted ? "text-green-700" : "text-[#87838F]"
           }`}
           style={{
             fontFamily: "var(--font-abc-diatype), sans-serif",
             fontWeight: 500,
           }}
         >
-          Mark as complete
+          {isCompleted ? "Completed" : "Mark as complete"}
         </span>
       </div>
 
       {/* Start Button */}
       <Button
-        disabled={chapter.completed}
+        disabled={isCompleted || isPending}
         className={`w-full h-10 rounded-[10px] text-[15px] leading-[18px] font-bold ${
-          chapter.completed
+          isCompleted
             ? "bg-[#DCDBDE] text-white/60 hover:bg-[#DCDBDE]"
             : "bg-[#9056F5] text-white hover:bg-[#7c4ae8]"
         }`}
         style={{ fontFamily: "var(--font-abc-diatype), sans-serif" }}
       >
-        {chapter.completed ? "Done" : "Start"}
+        {isCompleted ? "Done" : "Start"}
       </Button>
     </div>
   );
 }
-

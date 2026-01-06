@@ -4,7 +4,6 @@ import { Pagination } from "@/components/ui/pagination";
 import { Select } from "@/components/ui/select";
 import Image from "next/image";
 import { useState, useTransition } from "react";
-import { getChapters } from "../../queries";
 import type { Chapter, Course } from "../../types";
 import { ChapterCard } from "../ChapterCard";
 
@@ -25,7 +24,7 @@ export function CourseView({
   const [chapters, setChapters] = useState<Chapter[]>(initialChapters);
 
   const [currentPage, setCurrentPage] = useState(0);
-  const [isPending, startTransition] = useTransition();
+  const [isPending] = useTransition();
 
   const chaptersPerPage = 4;
 
@@ -39,12 +38,8 @@ export function CourseView({
 
     setSelectedCourse(newCourse);
     setCurrentPage(0);
-    setChapters([]);
-
-    startTransition(async () => {
-      const newChapters = await getChapters(newCourse.id);
-      setChapters(newChapters);
-    });
+    // Use chapters already present in the course object from the updated API
+    setChapters(newCourse.chapters || []);
   };
 
   const handlePreviousPage = () => {
@@ -75,7 +70,7 @@ export function CourseView({
           } mb-4 gap-4`}
         >
           <h1
-            className="text-[30px] leading-[45px] font-extrabold text-[#0E0420]"
+            className="text-[30px] leading-[45px] font-extrabold text-[#0E0420] flex items-center gap-3"
             style={{
               fontFamily: "var(--font-abc-diatype), sans-serif",
               fontWeight: 800,
@@ -231,7 +226,7 @@ export function CourseView({
             <>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6 mb-6">
                 {currentChapters.map((chapter) => (
-                  <ChapterCard key={chapter.id} chapter={chapter} />
+                  <ChapterCard key={chapter.id} chapter={chapter} initialClass={selectedCourse.class} />
                 ))}
               </div>
 

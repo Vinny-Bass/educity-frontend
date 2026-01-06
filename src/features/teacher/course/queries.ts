@@ -1,7 +1,7 @@
 'use server';
 
 import { getUser } from '@/lib/auth';
-import { fetchFromStrapi } from '@/lib/strapi';
+import { fetchFromStrapi, postToStrapi } from '@/lib/strapi';
 import qs from 'qs';
 import type { Chapter, Course } from './types';
 
@@ -47,12 +47,25 @@ export interface StudentProgressStat {
  * (This is now simple, secure, and authenticated)
  */
 export async function getCourses(): Promise<Course[]> {
-  // No token needed, fetchFromStrapi handles it!
-  return fetchFromStrapi<Course[]>('/courses?populate[chapters][populate]=thumbnail');
+  return fetchFromStrapi<Course[]>('/courses-progress');
+}
+
+/**
+ * Update course progress (mark chapter as complete/incomplete)
+ */
+export async function updateCourseProgress(classDocumentId: string, chapterDocumentId: string , completed: boolean): Promise<any> {
+  return postToStrapi('/class-chapter-statuses', {
+    data: {
+      class: classDocumentId,
+      chapter: chapterDocumentId,
+      teacher_marked_complete: completed
+    }
+  });
 }
 
 /**
  * Get chapters for a course
+ * (Note: prefer using chapters embedded in the course object from getCourses if available)
  */
 export async function getChapters(courseId: number): Promise<Chapter[]> {
   const endpoint = `/chapters?filters[courses][id][$eq]=${courseId}&populate=thumbnail`;

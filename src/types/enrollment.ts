@@ -3,6 +3,7 @@ import { User } from "./user";
 export interface Class {
   id: number;
   name?: string;
+  documentId?: string;
 }
 
 export interface Enrollment {

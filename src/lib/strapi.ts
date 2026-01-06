@@ -19,6 +19,7 @@ export async function fetchFromStrapi<T>(
 ): Promise<T> {
   const token = (await cookies()).get('token')?.value;
   const url = `${STRAPI_URL}/api${endpoint}`;
+  console.log('url', url);
   const defaultOptions: RequestInit = {
     headers: {
       'Content-Type': 'application/json',
@@ -41,6 +42,11 @@ export async function fetchFromStrapi<T>(
     }
 
     const data = await response.json();
+
+    // Check if the response is an array (direct return) or a { data: ... } object
+    if (Array.isArray(data)) {
+      return data as T;
+    }
 
     return data.data;
 
@@ -83,6 +89,11 @@ export async function postToStrapi<T>(
     }
 
     const data = await response.json();
+
+    // Check if the response is an array (direct return) or a { data: ... } object
+    if (Array.isArray(data)) {
+      return data as T;
+    }
 
     return data.data;
 

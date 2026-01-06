@@ -1,3 +1,5 @@
+import { Class } from "../../../types/enrollment";
+
 export interface Course {
   id: number;
   name: string;
@@ -6,10 +8,13 @@ export interface Course {
   ideasAndSkillsEarned: string[] | null;
   chapters: Chapter[];
   courseNumber: number;
+  completed?: boolean;
+  class: Class;
 }
 
 export interface Chapter {
   id: number;
+  documentId: string;
   name: string;
   thumbnail: string | null;
   chapterNumber?: number;

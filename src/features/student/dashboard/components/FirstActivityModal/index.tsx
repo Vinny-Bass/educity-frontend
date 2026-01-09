@@ -4,7 +4,9 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
+  DialogTitle,
 } from "@/components/ui/dialog";
+import { VisuallyHidden } from "@/components/ui/visually-hidden";
 import { DashboardData } from "@/features/student/dashboard/types";
 import Image from "next/image";
 
@@ -37,6 +39,9 @@ export function FirstActivityModal({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[500px] rounded-[20px] p-0" showCloseButton={false}>
+        <VisuallyHidden>
+          <DialogTitle>This week&apos;s Mission</DialogTitle>
+        </VisuallyHidden>
         <div className="flex flex-col items-center px-6 pt-6 pb-6 relative">
           {/* Cat icon in circle */}
           <div className="w-[110px] h-[110px] rounded-full bg-[#F3ECFF] flex items-center justify-center mb-4">

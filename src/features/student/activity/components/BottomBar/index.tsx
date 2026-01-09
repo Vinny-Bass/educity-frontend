@@ -140,6 +140,7 @@ export function BottomBar() {
     if (!isCompleted || isLastActivity || activities.length === 0 || !enrollmentId)
       return;
 
+    console.log('Completing activity with options:', completionOptions);
     await completeActivity(activityId, enrollmentId, completionOptions);
 
     const currentActivity = activities[currentActivityIndex];
@@ -199,6 +200,15 @@ export function BottomBar() {
     "h-10 w-10 flex items-center justify-center rounded-[10px] bg-[#DCDBDE] text-[#87838F] font-baloo text-[18px] font-normal cursor-not-allowed transition-all";
   const previousStepClass =
     "h-10 w-10 flex items-center justify-center rounded-[10px] bg-[#DCDBDE] text-[#87838F] font-baloo text-[18px] font-normal transition-all";
+
+  // Check if current activity is a recap activity
+  const currentActivity = activities.find((a) => a.documentId === activityId);
+  const isRecapActivity = currentActivity?.standardActivityType === "recap";
+
+  // Don't render bottom bar for recap activities
+  if (isRecapActivity) {
+    return null;
+  }
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 flex justify-center bg-transparent">

@@ -1,7 +1,9 @@
 "use client";
 
 import JoinTeamActivity from "@/features/student/activity/components/JoinTeamActivity";
+import { PlotAuctionActivity } from "@/features/student/activity/components/PlotAuctionActivity";
 import ProblemStatementActivity from "@/features/student/activity/components/ProblemStatementActivity";
+import { RecapActivity } from "@/features/student/activity/components/RecapActivity";
 import RenameTeamActivity from "@/features/student/activity/components/RenameTeamActivity";
 import UploadIdeaActivity from "@/features/student/activity/components/UploadIdeaActivity";
 import { VideoActivityContent } from "@/features/student/activity/components/VideoActivityContent";
@@ -55,6 +57,19 @@ export function ActivityDetailView({ activity }: ActivityDetailViewProps) {
               activity={activity}
               onComplete={() => setIsCurrentActivityCompleted(true)}
               onClose={() => {}}
+            />
+          );
+        case "recap":
+          return (
+            <RecapActivity
+              activity={activity}
+              onComplete={() => setIsCurrentActivityCompleted(true)}
+            />
+          );
+        case "plot_auction":
+          return (
+            <PlotAuctionActivity
+              activity={activity}
             />
           );
         case "reading":

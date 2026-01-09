@@ -5,7 +5,7 @@ import Image from "next/image";
 
 interface ActivityCardProps {
   type: "standard" | "team" | "homework";
-  standardActivityType?: "video" | "quiz" | "reading";
+  standardActivityType?: "video" | "quiz" | "reading" | "recap";
   teamActivityType?: "join_team";
   title: string;
   sendosAmount: number;

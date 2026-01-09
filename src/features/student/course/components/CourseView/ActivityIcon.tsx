@@ -1,4 +1,4 @@
-import { Lightbulb, PenSquare, Users, Video } from "lucide-react";
+import { ArrowLeft, Glasses, Lightbulb, PenSquare, Users, Sparkles, Star } from "lucide-react";
 
 interface ActivityIconProps {
   type: string | undefined;
@@ -10,9 +10,13 @@ export function ActivityIcon({ type, className }: ActivityIconProps) {
 
   switch (type) {
     case "video":
-      return <Video {...iconProps} />;
+      return <Glasses {...iconProps} />;
     case "quiz":
       return <PenSquare {...iconProps} />;
+    case "recap":
+      return <Sparkles {...iconProps} />;
+    case "plot_auction":
+      return <Star {...iconProps} />;
     case "team":
       return <Users {...iconProps} />;
     default:

@@ -4,7 +4,7 @@ export type ActivityStub = {
   id: string;
   documentId: string;
   type: "team" | "standard" | "homework";
-  standardActivityType?: "video" | "quiz" | "reading" | "problem_statement";
+  standardActivityType?: "video" | "quiz" | "reading" | "problem_statement" | "recap" | "plot_auction";
   teamActivityType?: "join_team" | "rename_team" | "upload_idea";
   teamActivityKey: string;
   title: string;
@@ -13,7 +13,19 @@ export type ActivityStub = {
   videoUrl?: string;
   duration?: number;
   description?: string;
+  guideline?: string;
+  recapHeader?: string;
   quizQuestions?: QuizQuestion[];
+  plots?: PlotOption[];
+};
+
+export type PlotOption = {
+  id: string;
+  documentId: string;
+  plotCode: string;
+  title: string;
+  description: string;
+  startingBid: number;
 };
 
 export type ProgressStub = {
@@ -60,4 +72,9 @@ export type TeamJoinCompletionPayload = {
   currentTeamId: string | null;
   newTeamId: string;
   isLocked: boolean;
+};
+
+export type PlotAuctionCompletionPayload = {
+  plotId: string;
+  bidAmount: number;
 };

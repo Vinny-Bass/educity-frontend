@@ -1,4 +1,4 @@
-import { ActivityStub, ProblemStatementCompletionPayload, ProgressStub, TeamIdeaCompletionPayload, TeamJoinCompletionPayload, TeamOption, TeamRenameCompletionPayload } from "@/features/student/activity/types";
+import { ActivityStub, PlotAuctionCompletionPayload, ProblemStatementCompletionPayload, ProgressStub, TeamIdeaCompletionPayload, TeamJoinCompletionPayload, TeamOption, TeamRenameCompletionPayload } from "@/features/student/activity/types";
 import { fetchFromStrapi, postToStrapi } from "@/lib/strapi";
 import qs from "qs";
 
@@ -9,6 +9,7 @@ export type ActivityCompletionPayload = {
     | TeamRenameCompletionPayload
     | TeamIdeaCompletionPayload
     | ProblemStatementCompletionPayload
+    | PlotAuctionCompletionPayload
     | null;
 };
 
@@ -22,6 +23,7 @@ export async function getChapterActivities(chapterDocId: string) {
       "sendosReward",
       "standardActivityType",
       "teamActivityType",
+      "recapHeader",
     ],
     sort: ["order:asc"],
   });
@@ -56,13 +58,15 @@ export async function getActivity(activityDocId: string) {
   const query = qs.stringify({
     populate: {
       quizQuestions: {
-        populate: {
-          answers: true,
-        },
+        populate: ['answers'],
       },
+      plots: true,
     },
   });
-  return fetchFromStrapi<ActivityStub>(`/activities/${activityDocId}?${query}`);
+  const result = await fetchFromStrapi<ActivityStub>(`/activities/${activityDocId}?${query}`);
+  console.log('getActivity result:', JSON.stringify(result, null, 2));
+  console.log('plots in result:', result.plots);
+  return result;
 }
 
 export async function completeActivity(

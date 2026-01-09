@@ -17,6 +17,7 @@ export interface Chapter {
   totalSendos?: number;
   onlineEstimatedTime?: number;
   inClassEstimatedTime?: number;
+  sendosDescription?: string | null;
 }
 
 export interface QuizAnswer {
@@ -37,7 +38,7 @@ export interface Activity {
   documentId: string;
   title: string;
   type: "standard" | "team" | "homework";
-  standardActivityType?: "video" | "quiz";
+  standardActivityType?: "video" | "quiz" | "recap" | "plot_auction";
   teamActivityType?: "join_team";
   order: number;
   sendosReward: number;
@@ -45,6 +46,9 @@ export interface Activity {
   quizQuestions?: QuizQuestion[];
   thumbnail?: { url: string } | null;
   description?: string | null;
+  guideline?: string | null;
+  duration?: number | null;
+  recapHeader?: string | null;
 }
 
 export interface ChapterWithActivities extends Chapter {

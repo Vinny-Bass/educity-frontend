@@ -9,7 +9,7 @@ import Image from "next/image";
 
 interface NextActivityCardProps {
   title: string;
-  type: "video" | "quiz" | "chapter";
+  type: "video" | "quiz" | "chapter" | "recap";
   sendosAmount?: number;
   iconUrl: string;
   chapterNumber?: number;
